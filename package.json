@@ -1,0 +1,20 @@
+{
+  "name": "allofw-utils",
+  "version": "0.0.2",
+  "description": "Allofw utilities",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "allofw": "0.0.2",
+    "js-yaml": "^3.8.1"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^3.5.29",
+    "@types/node": "^6.0.0"
+  },
+  "author": "Donghao Ren <donghao.ren+npm@gmail.com> (https://donghaoren.org/)",
+  "license": "MIT"
+}
