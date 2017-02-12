@@ -1,63 +1,89 @@
 import * as allofw from "allofw";
 import * as fs from "fs";
-import { IAllofwConfig } from "./config";
-
 import * as yaml from "js-yaml";
 
-export interface IApplicationRuntime {
-    server: HTTPServer;
-    config: IAllofwConfig;
-    networking: Networking;
+import { IAllofwConfig } from "./config";
+import { Networking } from "./networking";
+import { HTTPServer } from "./httpserver";
+import { WindowNavigation } from "./navigation";
+
+export interface ISimulatorRuntime {
+    server?: HTTPServer;
+    config?: IAllofwConfig;
+    networking?: Networking;
+}
+
+export interface IRendererRuntime {
+    GL: typeof allofw.GL3;
+    window?: allofw.OpenGLWindow;
+    navigation?: WindowNavigation;
+    omni?: allofw.OmniStereo;
+    networking?: Networking;
+}
+
+export interface ISimulatorInstance {
+}
+
+export interface IRendererInstance {
+    frame?: () => void;
+    render?: () => void;
 }
 
 export interface IApplicationModule {
-    renderer: class;
-    simulator: (app: IApplicationRuntime) => void;
+    renderer: new (app: IRendererRuntime) => IRendererInstance;
+    simulator: new (app: ISimulatorRuntime) => ISimulatorInstance;
 }
 
 export interface IApplicationInfo {
     config?: string;
-    role?: "simulator" | "renderer" | "both";
+    role?: string;
     module: IApplicationModule;
 }
 
 export function runAllofwApp(info: IApplicationInfo) {
     let configFile = info.config ? info.config : "allofw.yaml";
     let config = yaml.load(fs.readFileSync(configFile, "utf-8"));
+    let role = "null";
     if(info.role) {
-        let role = info.role;
+        role = info.role;
     } else {
-        let role = config.role;
+        role = config.role;
     }
     let appModule = info.module;
 
     function StartRenderer() {
-        var GL = allofw.GL3;
+        let GL = allofw.GL3;
 
-        var window = new allofw.OpenGLWindow({ config: configFile });
+        let window = new allofw.OpenGLWindow({ config: configFile });
         window.makeContextCurrent();
-        var omni = new allofw.OmniStereo(configFile);
-        var networking = new allofwutils.Networking(config, "renderer");
-        var nav = new allofwutils.WindowNavigation(window, omni);
+        let omni: allofw.OmniStereo | allofw.OpenVR.OmniStereo;
+        if(config.OpenVR) {
+            omni = new allofw.OpenVR.OmniStereo();
+        } else {
+            omni = new allofw.OmniStereo(configFile);
+        }
+        let networking = new Networking(config, "renderer");
+        let nav = new WindowNavigation(window, omni);
 
-        var app = { GL: GL, window: window, navigation: nav, omni: omni, config: config, networking: networking };
-        var renderer = new appModule.renderer(app);
+        let app = { GL: GL, window: window, navigation: nav, omni: omni, config: config, networking: networking };
+        let renderer = new appModule.renderer(app);
 
         // Main rendering code.
-        omni.onCaptureViewport(function() {
+        omni.onCaptureViewport(() => {
             GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
             if(renderer.render) renderer.render();
         });
 
         // Main loop (called by timer below).
         function render() {
+            if(renderer.frame) renderer.frame()
             omni.capture();
-            sz = window.getFramebufferSize();
-            omni.composite(0, 0, sz[0], sz[1]);
+            let sz = window.getFramebufferSize();
+            omni.composite(0, 0, sz[0], sz[1], null);
             window.swapBuffers();
         }
 
-        timer = setInterval(function() {
+        let timer = setInterval(() => {
             nav.update();
             render();
             window.pollEvents();
@@ -67,19 +93,19 @@ export function runAllofwApp(info: IApplicationInfo) {
             }
         });
 
-        window.onClose(function() {
+        window.onClose(() => {
             clearInterval(timer);
         });
     }
 
     function StartSimulator() {
-        var allofwutils = require("allofwutils");
-        var networking = new allofwutils.Networking(config, "simulator");
+        let networking = new Networking(config, "simulator");
+        let server: HTTPServer = null;
         if(config.http) {
-            var server = new allofwutils.HTTPServer(config);
+            server = new HTTPServer(config);
         }
-        var app = { server: server, config: config, networking: networking };
-        var simulator = new appModule.simulator(app);
+        let app = { server: server, config: config, networking: networking };
+        let simulator = new appModule.simulator(app);
     }
 
     if(role == "renderer") {

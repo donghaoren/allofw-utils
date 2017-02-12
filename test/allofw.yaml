@@ -1,0 +1,6 @@
+broadcasting:
+    renderer:
+        sub: tcp://127.0.0.1:60000
+    simulator:
+        pub: tcp://127.0.0.1:60000
+

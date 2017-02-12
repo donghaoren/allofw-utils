@@ -5,15 +5,26 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "build": "tsc -p src",
+    "watch": "tsc -p src -w",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "allofw-run" : "./dist/allofw-run.js"
   },
   "dependencies": {
     "allofw": "0.0.2",
-    "js-yaml": "^3.8.1"
+    "express": "^4.14.1",
+    "js-yaml": "^3.8.1",
+    "socket.io": "^1.7.2",
+    "zmq": "^2.15.3"
   },
   "devDependencies": {
+    "@types/express": "^4.0.35",
     "@types/js-yaml": "^3.5.29",
-    "@types/node": "^6.0.0"
+    "@types/node": "^6.0.0",
+    "@types/socket.io": "^1.4.27",
+    "@types/zmq": "0.0.20"
   },
   "author": "Donghao Ren <donghao.ren+npm@gmail.com> (https://donghaoren.org/)",
   "license": "MIT"
