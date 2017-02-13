@@ -15,7 +15,7 @@ export class HTTPServer extends EventEmitter {
 
         var app = express();
         var httpServer = http.createServer(app);
-        var io = socket_io(http);
+        var io = socket_io(httpServer);
 
         // Allow all origin
         app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -8,6 +8,8 @@ export interface IAllofwConfig {
         }
     }
 
+    navigation?: "window" | "network";
+
     http?: {
         static: string;
         port: number;

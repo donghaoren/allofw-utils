@@ -5,7 +5,6 @@ import * as yaml from "js-yaml";
 import { IAllofwConfig } from "./config";
 import { Networking } from "./networking";
 import { HTTPServer } from "./httpserver";
-import { WindowNavigation } from "./navigation";
 
 export interface ISimulatorRuntime {
     server?: HTTPServer;
@@ -16,7 +15,6 @@ export interface ISimulatorRuntime {
 export interface IRendererRuntime {
     GL: typeof allofw.GL3;
     window?: allofw.OpenGLWindow;
-    navigation?: WindowNavigation;
     omni?: allofw.OmniStereo;
     networking?: Networking;
 }
@@ -63,9 +61,8 @@ export function runAllofwApp(info: IApplicationInfo) {
             omni = new allofw.OmniStereo(configFile);
         }
         let networking = new Networking(config, "renderer");
-        let nav = new WindowNavigation(window, omni);
 
-        let app = { GL: GL, window: window, navigation: nav, omni: omni, config: config, networking: networking };
+        let app = { GL: GL, window: window, omni: omni, config: config, networking: networking };
         let renderer = new appModule.renderer(app);
 
         // Main rendering code.
@@ -84,7 +81,6 @@ export function runAllofwApp(info: IApplicationInfo) {
         }
 
         let timer = setInterval(() => {
-            nav.update();
             render();
             window.pollEvents();
 
