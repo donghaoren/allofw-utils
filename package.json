@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "allofw-run" : "./dist/allofw-run.js"
+    "allofw-run": "./dist/allofw-run.js"
   },
   "dependencies": {
     "allofw": "0.0.2",
@@ -24,7 +24,8 @@
     "@types/js-yaml": "^3.5.29",
     "@types/node": "^6.0.0",
     "@types/socket.io": "^1.4.27",
-    "@types/zmq": "0.0.20"
+    "@types/zmq": "0.0.20",
+    "typescript": "^2.1.6"
   },
   "author": "Donghao Ren <donghao.ren+npm@gmail.com> (https://donghaoren.org/)",
   "license": "MIT"
