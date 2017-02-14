@@ -73,11 +73,15 @@ export function runAllofwApp(info: IApplicationInfo) {
 
         // Main loop (called by timer below).
         function render() {
-            if(renderer.frame) renderer.frame()
+            if(renderer.frame) renderer.frame();
             omni.capture();
             let sz = window.getFramebufferSize();
             omni.composite(0, 0, sz[0], sz[1], null);
+            // GL.finish();
             window.swapBuffers();
+            GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+            // GL.flush();
+            // GL.finish();
         }
 
         let timer = setInterval(() => {
@@ -87,7 +91,7 @@ export function runAllofwApp(info: IApplicationInfo) {
             if(window.shouldClose()) {
                 clearInterval(timer);
             }
-        });
+        }, 1);
 
         window.onClose(() => {
             clearInterval(timer);
