@@ -17,6 +17,7 @@ export interface IRendererRuntime {
     window?: allofw.OpenGLWindow;
     omni?: allofw.OmniStereo;
     networking?: Networking;
+    config: IAllofwConfig;
 }
 
 export interface ISimulatorInstance {
