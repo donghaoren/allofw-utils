@@ -77,11 +77,8 @@ export function runAllofwApp(info: IApplicationInfo) {
             omni.capture();
             let sz = window.getFramebufferSize();
             omni.composite(0, 0, sz[0], sz[1], null);
-            // GL.finish();
             window.swapBuffers();
             GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
-            // GL.flush();
-            // GL.finish();
         }
 
         let timer = setInterval(() => {
