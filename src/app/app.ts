@@ -15,7 +15,7 @@ export interface ISimulatorRuntime {
 export interface IRendererRuntime {
     GL: typeof allofw.GL3;
     window?: allofw.OpenGLWindow;
-    omni?: allofw.OmniStereo;
+    omni?: allofw.IOmniStereo;
     networking?: Networking;
     config: IAllofwConfig;
 }
