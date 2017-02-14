@@ -96,8 +96,8 @@ export class WindowNavigation extends Navigation {
         }
         var speed = 5;
         this._pose.position = this._pose.position.add(this._pose.rotation.rotate(new Vector3(vs[0], vs[1], vs[2])).scale(speed * dt))
-        this._pose.rotation = Quaternion.rotation(new Vector3(0, 1, 0), vs[3] * dt).mul(this._pose.rotation)
-        this._pose.rotation = this._pose.rotation.mul(Quaternion.rotation(new Vector3(1, 0, 0), vs[4] * dt))
+        this._pose.rotation = Quaternion.Rotation(new Vector3(0, 1, 0), vs[3] * dt).mul(this._pose.rotation)
+        this._pose.rotation = this._pose.rotation.mul(Quaternion.Rotation(new Vector3(1, 0, 0), vs[4] * dt))
 
         if(this._poseTarget) {
             this._pose.position = this._pose.position.interp(this._poseTarget.position, 1 - blend);
@@ -164,10 +164,10 @@ export class NetworkNavigation extends Navigation {
 
         networking.on("nav", (l_x: number | string, l_y: number, l_z: number, r_x: number, r_y: number) => {
             if(l_x == "reset") {
-                this._poseTarget = {
-                    position: this._homePosition,
-                    rotation: this._homeRotation
-                };
+                this._poseTarget = new Pose(
+                    this._homePosition,
+                    this._homeRotation
+                );
                 this._velocityPrevious = [ 0, 0, 0, 0, 0 ];
             } else {
                 l_x = l_x as number;
@@ -211,8 +211,8 @@ export class NetworkNavigation extends Navigation {
         }
         var speed = 5;
         this._pose.position = this._pose.position.add(this._pose.rotation.rotate(new Vector3(vs[0], vs[1], vs[2])).scale(speed * dt))
-        this._pose.rotation = Quaternion.rotation(new Vector3(0, 1, 0), vs[3] * dt).mul(this._pose.rotation)
-        this._pose.rotation = this._pose.rotation.mul(Quaternion.rotation(new Vector3(1, 0, 0), vs[4] * dt))
+        this._pose.rotation = Quaternion.Rotation(new Vector3(0, 1, 0), vs[3] * dt).mul(this._pose.rotation)
+        this._pose.rotation = this._pose.rotation.mul(Quaternion.Rotation(new Vector3(1, 0, 0), vs[4] * dt))
 
         if(this._poseTarget) {
             this._pose.position = this._pose.position.interp(this._poseTarget.position, 1 - blend);

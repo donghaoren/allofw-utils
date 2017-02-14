@@ -24,7 +24,7 @@ export class Quaternion {
         return this.mul(vq).mul(this.conj()).v;
     }
 
-    public static rotation(axis: Vector3, angle: number): Quaternion {
+    public static Rotation(axis: Vector3, angle: number): Quaternion {
         return new Quaternion(axis.normalize().scale(Math.sin(angle / 2)), Math.cos(angle / 2));
     }
 
@@ -33,7 +33,7 @@ export class Quaternion {
         return new Quaternion(this.v.scale(s), this.w * s);
     }
 
-    public static slerp(q1: Quaternion, q2: Quaternion, t: number): Quaternion {
+    public static Slerp(q1: Quaternion, q2: Quaternion, t: number): Quaternion {
         let acos_arg = q1.v.x * q2.v.x + q1.v.y * q2.v.y + q1.v.z * q2.v.z + q1.w * q2.w;
         if(acos_arg > 1) acos_arg = 1;
         if(acos_arg < -1) acos_arg = -1;
@@ -58,6 +58,6 @@ export class Quaternion {
     }
 
     public slerp(q2: Quaternion, t: number): Quaternion {
-        return Quaternion.slerp(this, q2, t);
+        return Quaternion.Slerp(this, q2, t);
     }
 }
