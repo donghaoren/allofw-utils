@@ -47,7 +47,7 @@ export class ShaderException extends Error {
 export interface IShaders {
     vertex: string;
     fragment: string;
-    geometry: string;
+    geometry?: string;
 }
 
 export function compileShaders(shaders: IShaders) {

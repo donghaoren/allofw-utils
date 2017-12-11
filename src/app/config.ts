@@ -2,9 +2,11 @@ export interface IAllofwConfig {
     broadcasting?: {
         renderer: {
             sub: string;
+            push: string;
         };
         simulator: {
             pub: string;
+            pull: string
         }
     }
 
